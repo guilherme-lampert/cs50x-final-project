@@ -7,10 +7,13 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
 
+    from . import authorization
+    app.register_blueprint(authorization.bp)
 
-    # a simple page that says hello
-    @app.route('/')
-    def hello():
-        return 'Hello, World!'
+    from . import query
+    app.register_blueprint(query.bp)
+
+    from . import stock_mkt
+    app.register_blueprint(stock_mkt.bp)
 
     return app
