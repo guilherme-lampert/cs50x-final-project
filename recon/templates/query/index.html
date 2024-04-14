@@ -5,4 +5,83 @@
 {% endblock %}
 
 {% block main %}
+    
+    <div class="container-fluid text-light py-5" id="index-search">
+        <div class="container text-center">
+
+            <!-- Placeholder to give some space between the nav and the text -->
+            <div class="w-100 my-4 py-5"></div>
+
+            <div class="row">
+                <div class="col">
+                    <span class="fs-1"><i class="bi bi-database"></i> recon</span>
+                </div>
+            </div>
+            <div class="row justify-content-center my-3">
+                <div class="col-md-8">
+                    <p>
+                        RECON (Real Economic Data) is the web application that allows people to see economic information quickly and easily.
+                        We know how difficult it can be to get and understand this kind of info, so we summarized all the main macroeconomic
+                        information that you need to comprehend the current situation of an ecomomy.
+                    </p>
+                </div>
+            </div>
+            <form class="row justify-content-center">
+                <div class="col-md-6">
+                    <input type="text" class="form-control bg-transparent border-light" name="country" placeholder="Country... (Ex: Brazil)" data-bs-theme="dark">
+                </div>
+                <div class="col col-md-2 my-3 my-md-0">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Placeholder to give some space between the nav and the text -->
+            <div class="w-100 my-4 py-5"></div>
+
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark py-5 " data-bs-theme="dark">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-3 g-5">
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='/img/index-card-query.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a class="text-decoration-none text-white" href="#">
+                                <h5 class="card-title">Country query</h5>
+                                <p class="card-text">Search for specific countries and indicators instead of only one country at a time.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='/img/index-card-stocks.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a class="text-decoration-none text-white" href="#">
+                                <h5 class="card-title">Stock market</h5>
+                                <p class="card-text">Real-time data of stock quotes and major financial market news.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='/img/index-card-tutorial.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a class="text-decoration-none text-white" href="#">
+                                <h5 class="card-title">How to</h5>
+                                <p class="card-text">Learn about the indicators presented here and find out what our main sources are.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
