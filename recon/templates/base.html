@@ -12,9 +12,10 @@
         
         <title>{% block title %}{% endblock %}</title>
     </head>
+    
     <body>
         <header>
-            <nav class="navbar navbar-expand-md bg-primary fixed-top" data-bs-theme="dark">
+            <nav class="navbar navbar-expand-md bg-primary sticky-top" data-bs-theme="dark">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url_for('query.index') }}">
                         <span><i class="bi bi-database"></i> recon</span>
@@ -68,26 +69,40 @@
             </nav>
         </header>
 
-        <!-- Add flashed messages-->
         <main>
             {% block main %}{% endblock %}
         </main>
-        <footer>
-            <!-- Add footer -->
-            <div class="container-fluid bg-dark text-white" data-bs-theme="dark">
 
-                <div class="border-bottom mb-3"></div>
+        <footer>
+            <div class="container-fluid bg-dark text-white sticky-bottom" data-bs-theme="dark">
+
+                <!-- Ideia inicial, arrumar depois-->
                 
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <p>Developed by Guilherme N. Lampert, for CS50x 2024.</p>
-                        </div>
-                    </div>
+                <div class="d-flex flex-wrap justify-content-between align-items-center border-top py-3 sticky-bottom">
+                    <p class="col-md-4 mb-0 text-body-secondary">Developed by Guilherme N. Lampert, for CS50x 2024.</p>
+                    <a class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" href="/">
+                        <span><i class="bi bi-database"></i> recon</span>
+                    </a>
+                    <ul class="nav col-md-4 justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link px-2 text-body-secondary" href="">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-2 text-body-secondary" href="">Country query</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-2 text-body-secondary" href="">Stock Market</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-2 text-body-secondary" href="">How to use</a>
+                        </li>
+                    </ul>
                 </div>    
             </div>
         </footer>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
     </body>
 </html>

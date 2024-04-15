@@ -6,4 +6,5 @@ bp = Blueprint('query', __name__)
 
 @bp.route('/')
 def index():
+    """"""
     return render_template("query/index.html")
