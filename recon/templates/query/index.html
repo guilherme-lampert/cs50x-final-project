@@ -6,8 +6,8 @@
 
 {% block main %}
     
-    <div class="container-fluid text-light py-5" id="index-search">
-        <div class="container text-center">
+    <div class="container-fluid text-light" id="index-search">
+        <div class="container text-center py-5 min-vh-100">
 
             <!-- Placeholder to give some space between the nav and the text -->
             <div class="w-100 my-4 py-5"></div>
@@ -37,14 +37,11 @@
                 </div>
             </form>
 
-            <!-- Placeholder to give some space between the nav and the text -->
-            <div class="w-100 my-4 py-5"></div>
-
         </div>
     </div>
 
     <div class="container py-5">
-        <div class="row row-cols-1 row-cols-md-3 g-5">
+        <div class="row row-cols-1 row-cols-md-3">
             <div class="col">
                 <div class="card">
                     <img src="{{ url_for('static', filename='/img/index-card-query.jpg') }}" class="card-img-top" alt="...">
@@ -81,7 +78,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container overflow-auto">
         
     </div>
 
