@@ -14,8 +14,14 @@
     </head>
     
     <body>
+
+        <!--
+            Inspired by bootstrap offcanvas navbar example at the official documentation and by the headers example
+            https://getbootstrap.com/docs/5.3/components/navbar/#offcanvas
+            https://getbootstrap.com/docs/5.3/examples/headers/
+        -->
         <header>
-            <nav class="navbar navbar-expand-md bg-primary sticky-top" data-bs-theme="dark">
+            <nav class="navbar navbar-expand-md bg-primary fixed-top" data-bs-theme="dark">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url_for('query.index') }}">
                         <span><i class="bi bi-database"></i> recon</span>
@@ -30,9 +36,9 @@
                         </div>
                         <div class="offcanvas-body p-4 pt-0 p-md-0">
                             <hr class="d-md-none text-white-50">
-                            <ul class="navbar-nav flex-row flex-wrap ms-auto">
+                            <ul class="navbar-nav flex-row flex-wrap">
                                 <li class="nav-item col-6 col-md-auto">
-                                    <a class="nav-link" href="#">Home</a>
+                                    <a class="nav-link" href="{{ url_for('query.index') }}">Home</a>
                                 </li>
                                 <li class="nav-item col-6 col-md-auto">
                                     <a class="nav-link" href="#">Query</a>
@@ -41,7 +47,7 @@
                                     <a class="nav-link" href="#">Stock market</a>
                                 </li>
                                 <li class="nav-item col-6 col-md-auto">
-                                    <a class="nav-link" href="#">How to use</a>
+                                    <a class="nav-link" href="{{ url_for('query.tutorial') }}">How to use</a>
                                 </li>
                             </ul>
                             <hr class="d-lg-none text-white-50">
@@ -60,8 +66,8 @@
                                     </li>
                                 {% else %}
                                     <div class="d-grid gap-2 d-md-block">
-                                        <button class="btn btn-outline-light" type="button">Log in</button>
-                                        <button class="btn btn-light" type="button">Sign up</button>
+                                        <a href="{{ url_for('auth.login') }}" role="button" class="btn btn-outline-light" id="nav-button-hover-change">Log in</a>
+                                        <a href="{{ url_for('auth.signup') }}" role="button" class="btn btn-light text-primary">Sign up</a>
                                     </div>
                                 {% endif %}
                             </ul>
@@ -75,27 +81,34 @@
             {% block main %}{% endblock %}
         </main>
 
-        <!-- Inspired by the footer example in bootstrap: https://getbootstrap.com/docs/5.3/examples/footers/-->
+        <!-- Inspired by the footer example: https://getbootstrap.com/docs/5.3/examples/footers/-->
         <footer>
-            <div class="container-fluid py-3 bg-dark text-body-secondary" data-bs-theme="dark">
-                <div class="container">
-                    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link px-2 text-body-secondary">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link px-2 text-body-secondary">Query</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link px-2 text-body-secondary">Stock market</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link px-2 text-body-secondary">How to use</a>
-                        </li>
-                    </ul>
-
-                    <p class="text-center">Developed by Guilherme N. Lampert, for CS50x 2024.</p>
-
+            <div class="container-fluid bg-dark text-body-secondary" data-bs-theme="dark">
+                <div class="container border-top py-5">
+                    <div class="row d-flex flex-column flex-md-row justify-content-between g-5">
+                        <div class="col d-flex order-3 order-md-1 justify-content-center justify-content-md-start align-items-center">
+                            <p>Developed by Guilherme N. Lampert, for <a href="https://cs50.harvard.edu/x/2024/">CS50x 2024.</a></p>
+                        </div>
+                        <div class="col d-flex text-center text-white order-1 order-md-2 justify-content-center align-items-center">
+                            <h3><i class="bi bi-database"></i></h3>
+                        </div>
+                        <div class="col order-2 order-md-3">
+                            <ul class="nav justify-content-center align-items-center justify-content-md-end">
+                                <li class="nav-item">
+                                  <a class="nav-link text-body-secondary" href="{{ url_for('query.index') }}">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link text-body-secondary" href="#">Query</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link text-body-secondary" href="#">Stock market</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-body-secondary" href="#">How to use</a>
+                                  </li>
+                              </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>

@@ -22,9 +22,9 @@
                     </p>
                 </div>
             </div>
-            <form action="/country" class="row justify-content-center">
+            <form action="/query/country-summary" class="row justify-content-center">
                 <div class="col-md-6">
-                    <input type="text" class="form-control bg-transparent border-light" name="country" placeholder="Country... (Ex: Brazil)" data-bs-theme="dark">
+                    <input type="text" class="form-control bg-transparent border-light" name="country" placeholder="Brazil" data-bs-theme="dark">
                 </div>
                 <div class="col col-md-2 my-3 my-md-0">
                     <div class="d-grid">
@@ -35,47 +35,73 @@
         </div>
     </div>
 
-    <div class="container py-5">
-        <div class="row row-cols-1 row-cols-md-3">
-            <div class="col">
-                <div class="card">
-                    <img src="{{ url_for('static', filename='/img/index-card-query.jpg') }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <a class="text-decoration-none text-dark" href="#">
-                            <h5 class="card-title">Country query</h5>
-                            <p class="card-text">Search for specific countries and indicators instead of only one country at a time.</p>
-                        </a>
-                    </div>
+    <!-- Inspired by the features examples: https://getbootstrap.com/docs/5.3/examples/features/-->
+    <div class="container-fluid py-5 bg-dark text-white" data-bs-theme="dark">
+        <div class="container">
+            <div class="row pb-5 text-white-50">
+                <div class="col border-bottom">
+                    <h2>Free features</h2>
                 </div>
             </div>
-            <div class="col">
-                <div class="card">
-                    <img src="{{ url_for('static', filename='/img/index-card-stocks.jpg') }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <a class="text-decoration-none text-dark" href="#">
-                            <h5 class="card-title">Stock market</h5>
-                            <p class="card-text">Real-time data of stock quotes and major financial market news.</p>
-                        </a>
-                    </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-5 pb-5">
+                <div class="col d-md-flex flex-column align-items-start">
+                    <h1><i class="bi bi-globe-americas text-primary"></i></h1>
+                    <h3>Country summary</h3>
+                    <p>Search for any country of your choice and get a summary with the main macroeconomic characteristics of that country, such as the inflation rate, GDP, unemployment, and other topics.</p>
+                    <p class="mt-auto"><a class="link-offset-3" href="{{ url_for('query.index') }}">Start here</a></p>
+                </div>
+
+                <div class="col d-md-flex flex-column align-items-start">
+                    <h1><i class="bi bi-lightning-fill text-primary"></i></h1>
+                    <h3>Refined query</h3>
+                    <p>Select multiple countries and macroeconomic indicators of your choice, visualizing only what you want to see at the moment. There are a lot of indicators and countries to explore.</p>
+                    <p class="mt-auto"><a class="link-offset-3" href="#">Query here</a></p>
+                </div>
+
+                <div class="col d-md-flex flex-column align-items-start">
+                    <h1><i class="bi bi-graph-up text-primary"></i></h1>
+                    <h3>Stock market</h3>
+                    <p>Look up any stock you want and be informed about the current situation of the stock market. Know what's up and what's down. Is this a bull market or bear market?</p>
+                    <p class="mt-auto"><a class="link-offset-3" href="#">See the market</a></p>
                 </div>
             </div>
-            <div class="col">
-                <div class="card">
-                    <img src="{{ url_for('static', filename='/img/index-card-tutorial.jpg') }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <a class="text-decoration-none text-dark" href="#">
-                            <h5 class="card-title">How to</h5>
-                            <p class="card-text">Learn about the indicators presented here and find out what our main sources are.</p>
-                        </a>
+
+
+            <div class="row py-5 text-white-50">
+                <div class="col border-bottom">
+                    <h2>Members-only features</h2>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-5 pb-5">
+                <div class="col d-flex flex-column align-items-start gap-2">
+                    <h3>Get more</h3>
+                    <p>By becoming a member of our platform, you will have access to other features that will help you in your queries. Not only that, you will also be able to track your favorite stocks. Join now, it's free.</p>
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Register now</a>
+                </div>
+                <div class="col">
+                    <div class="row row-cols-1 row-cols-sm-2 g-4">
+                        <div class="col">
+                            <h4><i class="bi bi-file-earmark-arrow-down-fill"></i> Download data</h4>
+                            <p>Download your refined queries in a .csv file so you can use them as you like.</p>
+                        </div>
+                        <div class="col">
+                            <h4><i class="bi bi-floppy-fill"></i></i> Save queries</h4>
+                            <p>Save your queries so that you don't need to repeat the process again.</p>
+                        </div>
+                        <div class="col">
+                            <h4><i class="bi bi-pie-chart-fill"></i></i> Stock portfolio</h4>
+                            <p>Keep track of stocks that you've put in a stock portfolio. 100% customizable.</p>
+                        </div>
+                        <div class="col">
+                            <h4><i class="bi bi-person-fill-gear"></i> Flexible account</h4>
+                            <p>Unsubscribe or reset your account any time you want. </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="container overflow-auto">
-        
-    </div>
-
 
 {% endblock %}

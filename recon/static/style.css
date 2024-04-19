@@ -4,3 +4,7 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+#nav-button-hover-change:hover {
+    color: #0d6efd;
+}
