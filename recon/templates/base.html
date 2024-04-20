@@ -101,23 +101,23 @@
             <footer>
                 <div class="container-fluid bg-dark text-body-secondary" data-bs-theme="dark">
                     <div class="container border-top py-5">
-                        <div class="row d-flex flex-column flex-md-row justify-content-between g-5">
+                        <div class="row d-flex flex-column flex-md-row justify-content-between g-3">
                             <div class="col d-flex order-3 order-md-1 justify-content-center justify-content-md-start align-items-center">
                                 <p>Developed by Guilherme N. Lampert, for <a href="https://cs50.harvard.edu/x/2024/">CS50x 2024.</a></p>
                             </div>
                             <div class="col d-flex text-center text-white order-1 order-md-2 justify-content-center align-items-center">
-                                <h3><a href="{{ url_for('base.index') }}" class="text-white"><i class="bi bi-database"></i></a></h3>
+                                <h3><a href="{{ url_for('base.index') }}" class="text-white"><i class="bi bi-database"></i></a> recon</h3>
                             </div>
                             <div class="col order-2 order-md-3">
                                 <ul class="nav justify-content-center align-items-center justify-content-md-end">
                                     <li class="nav-item">
-                                    <a class="nav-link text-body-secondary" href="{{ url_for('base.index') }}">Home</a>
+                                        <a class="nav-link text-body-secondary" href="{{ url_for('base.index') }}">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                    <a class="nav-link text-body-secondary" href="{{ url_for('query.index') }}">Query</a>
+                                        <a class="nav-link text-body-secondary" href="{{ url_for('query.index') }}">Query</a>
                                     </li>
                                     <li class="nav-item">
-                                    <a class="nav-link text-body-secondary" href="{{ url_for('stock_market.index') }}">Stock market</a>
+                                        <a class="nav-link text-body-secondary" href="{{ url_for('stock_market.index') }}">Stock market</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-body-secondary" href="{{ url_for('base.tutorial') }}">How to use</a>

@@ -1,9 +1,8 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, request, session, g
 from werkzeug.security import check_password_hash, generate_password_hash
-import functools
 
 from recon.db import get_db
-from recon.utils import check_password
+from recon.utils import check_password, logoff_required
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -13,6 +12,7 @@ Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/views/
 """
 
 @bp.route("/signup", methods=["GET", "POST"])
+@logoff_required
 def signup():
     """Register a new user"""
 
@@ -57,6 +57,7 @@ def signup():
 
 
 @bp.route("/login", methods=["GET", "POST"])
+@logoff_required
 def login():
     """Logs a new user in, creating a session"""
     
@@ -83,13 +84,23 @@ def login():
             session.clear()
             session['user_id'] = user['id']
 
-            flash(f"Welcome back, {username}")
+            flash(f"Welcome, {username}")
             return redirect(url_for('base.index'))
         else:
             flash(error)
             return render_template("auth/login.html", error=error)
     
     return render_template("auth/login.html")
+
+
+@bp.route('/logout')
+def logout():
+    """Logs the current user out"""
+    
+    session.clear()
+    
+    flash("Logged out")
+    return redirect(url_for('base.index'))
 
 
 @bp.before_app_request
@@ -105,27 +116,3 @@ def load_logged_in_user():
         g.user = get_db().execute(
             "SELECT * FROM user WHERE id = ?", (user_id,)
         ).fetchone()
-
-
-@bp.route('/logout')
-def logout():
-    """Logs the current user out"""
-    
-    session.clear()
-    
-    flash("Logged out")
-    return redirect(url_for('base.index'))
-
-
-def login_required(view):
-    """Decorator used in views that need a session"""
-
-    @functools.wraps(view)
-    def wrapped_view(*args, **kwargs):
-        
-        if not g.user:
-            return redirect(url_for('auth.login'))
-
-        return view(*args, **kwargs)
-
-    return wrapped_view
