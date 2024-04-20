@@ -1,15 +1,18 @@
 import sqlite3
 from flask import current_app, g
 
+"""
+NOTE: Most of the functions were built following the pattern of the official Flask documentation. The ones with a few lines are basically the same.
+Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+"""
 
-# NOTE: This function was inspired by the official Flask documentation. Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+
 def init_app(app):
-    """Ensure that the close_db function will be called after each response to close the connection"""
-
+    """Ensures that the close_db function will be called after each response to close the connection"""
+    
     app.teardown_appcontext(close_db)
 
 
-# NOTE: This function was inspired by the official Flask documentation. Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 def get_db():
     """Creates a connection with the database"""
 
@@ -23,9 +26,8 @@ def get_db():
     return g.db
 
 
-# NOTE: This function was inspired by the official Flask documentation. Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 def close_db(exception):
-    """Automatically closes the connection with the database after each response"""
+    """Closes the connection with the database"""
 
     db = g.pop('db', None)
 

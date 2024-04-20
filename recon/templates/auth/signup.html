@@ -5,5 +5,58 @@
 {% endblock %}
 
 {% block main %}
-    <p>estamos em sign up</p>
+    <div class="d-flex flex-column justify-content-center align-items-center bg-dark min-vh-100 text-white" data-bs-theme="dark">
+        <div class="container">
+            <form action="{{ url_for('auth.signup') }}" method="post" class="row g-3">
+
+                <h1 class="text-white">
+                    <a href="{{ url_for('base.index') }}" class="text-decoration-none text-primary">
+                        <i class="bi bi-database"></i> recon
+                    </a>
+                    | Sign up
+                </h1>
+
+                <div class="col-12 col-md-6">
+                    <label for="firstname" class="form-label">First name (optional)</label>
+                    <input name="first_name" type="text" class="form-control" id="firstname" placeholder="David">
+                </div>
+                
+                <div class="col-12 col-md-6">
+                    <label for="lastname" class="form-label">Last name (optional)</label>
+                    <input name="last_name" type="text" class="form-control" id="lastname" placeholder="Malan">
+                </div>
+
+                <div class="col-12">
+                    <label for="username" class="form-label">Username (required)</label>
+                    <input name="username" type="text" class="form-control" id="username" placeholder="duck50" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="password" class="form-label">Password (required)</label>
+                    <input name="password" type="password" class="form-control" id="password" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="confirmation" class="form-label">Password confirmation (required)</label>
+                    <input name="confirmation" type="password" class="form-control" id="confirmation" required>
+                </div>
+
+                <div class="col-12 text-center mt-5">
+                    <p class="text-body-secondary">Password MUST have: 1 uppercase letter | 1 lowercase letter | 1 digit | 1 special character | min. 8 characters</p>
+                </div>
+
+                <div class="col">
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Sign up</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
 {% endblock %}

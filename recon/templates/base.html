@@ -20,98 +20,116 @@
             https://getbootstrap.com/docs/5.3/components/navbar/#offcanvas
             https://getbootstrap.com/docs/5.3/examples/headers/
         -->
-        <header>
-            <nav class="navbar navbar-expand-md bg-primary fixed-top" data-bs-theme="dark">
-                <div class="container">
-                    <a class="navbar-brand" href="{{ url_for('query.index') }}">
-                        <span><i class="bi bi-database"></i> recon</span>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasMd">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="offcanvas offcanvas-end bg-primary" tabindex="-1" id="navbarOffcanvasMd">
-                        <div class="offcanvas-header px-4 pb-0">
-                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="bi bi-database"></i> recon</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+            <header class="fixed-top">
+                {% if request.path not in [url_for('auth.login'), url_for('auth.signup')] %}
+                    <nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
+                        <div class="container">
+                            <a class="navbar-brand" href="{{ url_for('base.index') }}">
+                                <span><i class="bi bi-database"></i> recon</span>
+                            </a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasMd">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="offcanvas offcanvas-end bg-primary" tabindex="-1" id="navbarOffcanvasMd">
+                                <div class="offcanvas-header px-4 pb-0">
+                                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="bi bi-database"></i> recon</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                                </div>
+                                <div class="offcanvas-body p-4 pt-0 p-md-0">
+                                    <hr class="d-md-none text-white-50">
+                                    <ul class="navbar-nav flex-row flex-wrap">
+                                        <li class="nav-item col-6 col-md-auto">
+                                            <a class="nav-link {% block home_active %}{% endblock %}" href="{{ url_for('base.index') }}">Home</a>
+                                        </li>
+                                        <li class="nav-item col-6 col-md-auto">
+                                            <a class="nav-link {% block query_active %}{% endblock %}" href="{{ url_for('query.index') }}">Query</a>
+                                        </li>
+                                        <li class="nav-item col-6 col-md-auto">
+                                            <a class="nav-link {% block stock_market_active %}{% endblock %}" href="{{ url_for('stock_market.index') }}">Stock market</a>
+                                        </li>
+                                        <li class="nav-item col-6 col-md-auto">
+                                            <a class="nav-link {% block tutorial_active %}{% endblock %}" href="{{ url_for('base.tutorial') }}">How to use</a>
+                                        </li>
+                                    </ul>
+                                    <hr class="d-lg-none text-white-50">
+                                    <ul class="navbar-nav ms-auto">
+                                        {% if g.user %}
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                                    <i class="bi bi-person-fill"></i>  {% if g.user["first_name"] %} {{ g.user["first_name"] }} {% else %} {{ g.user["username"] }} {% endif %}
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end bg-primary-subtle">
+                                                    <li><a class="dropdown-item" href="#">My account</a></li>
+                                                    <li><a class="dropdown-item" href="#">My queries</a></li>
+                                                    <li><a class="dropdown-item" href="#">My stock lists</a></li>
+                                                    <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a></li>
+                                                </ul>
+                                            </li>
+                                        {% else %}
+                                            <div class="d-grid gap-2 d-md-block">
+                                                <a href="{{ url_for('auth.login') }}" role="button" class="btn btn-outline-light" id="nav-button-hover-change">Log in</a>
+                                                <a href="{{ url_for('auth.signup') }}" role="button" class="btn btn-light text-primary">Sign up</a>
+                                            </div>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="offcanvas-body p-4 pt-0 p-md-0">
-                            <hr class="d-md-none text-white-50">
-                            <ul class="navbar-nav flex-row flex-wrap">
-                                <li class="nav-item col-6 col-md-auto">
-                                    <a class="nav-link" href="{{ url_for('query.index') }}">Home</a>
-                                </li>
-                                <li class="nav-item col-6 col-md-auto">
-                                    <a class="nav-link" href="#">Query</a>
-                                </li>
-                                <li class="nav-item col-6 col-md-auto">
-                                    <a class="nav-link" href="#">Stock market</a>
-                                </li>
-                                <li class="nav-item col-6 col-md-auto">
-                                    <a class="nav-link" href="{{ url_for('query.tutorial') }}">How to use</a>
-                                </li>
-                            </ul>
-                            <hr class="d-lg-none text-white-50">
-                            <ul class="navbar-nav ms-auto">
-                                {% if g.user %}
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                            <i class="bi bi-person-fill"></i> Account
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end bg-primary-subtle">
-                                            <li><a class="dropdown-item" href="#">My account</a></li>
-                                            <li><a class="dropdown-item" href="#">My queries</a></li>
-                                            <li><a class="dropdown-item" href="#">My stock lists</a></li>
-                                            <li><a class="dropdown-item" href="#">Log out</a></li>
-                                        </ul>
-                                    </li>
-                                {% else %}
-                                    <div class="d-grid gap-2 d-md-block">
-                                        <a href="{{ url_for('auth.login') }}" role="button" class="btn btn-outline-light" id="nav-button-hover-change">Log in</a>
-                                        <a href="{{ url_for('auth.signup') }}" role="button" class="btn btn-light text-primary">Sign up</a>
-                                    </div>
-                                {% endif %}
-                            </ul>
-                        </div>
+                    </nav>
+                {% endif %}
+                
+                {% if get_flashed_messages() %}
+                <div class="container mt-5">
+                    <div class="alert {% if error %} alert-danger {% else %} alert-info {% endif %} alert-dismissible fade show text-center" role="alert">
+                        <strong>{% if error %} Error! {% else %} Success! {% endif %}</strong>{{ get_flashed_messages() | join(" ") }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 </div>
-            </nav>
-        </header>
+                {% endif %}
+
+            </header>
 
         <main>
             {% block main %}{% endblock %}
         </main>
 
         <!-- Inspired by the footer example: https://getbootstrap.com/docs/5.3/examples/footers/-->
-        <footer>
-            <div class="container-fluid bg-dark text-body-secondary" data-bs-theme="dark">
-                <div class="container border-top py-5">
-                    <div class="row d-flex flex-column flex-md-row justify-content-between g-5">
-                        <div class="col d-flex order-3 order-md-1 justify-content-center justify-content-md-start align-items-center">
-                            <p>Developed by Guilherme N. Lampert, for <a href="https://cs50.harvard.edu/x/2024/">CS50x 2024.</a></p>
-                        </div>
-                        <div class="col d-flex text-center text-white order-1 order-md-2 justify-content-center align-items-center">
-                            <h3><i class="bi bi-database"></i></h3>
-                        </div>
-                        <div class="col order-2 order-md-3">
-                            <ul class="nav justify-content-center align-items-center justify-content-md-end">
-                                <li class="nav-item">
-                                  <a class="nav-link text-body-secondary" href="{{ url_for('query.index') }}">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link text-body-secondary" href="#">Query</a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link text-body-secondary" href="#">Stock market</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-body-secondary" href="#">How to use</a>
-                                  </li>
-                              </ul>
+
+        {% if request.path not in [url_for('auth.login'), url_for('auth.signup')] %}
+
+            <footer>
+                <div class="container-fluid bg-dark text-body-secondary" data-bs-theme="dark">
+                    <div class="container border-top py-5">
+                        <div class="row d-flex flex-column flex-md-row justify-content-between g-5">
+                            <div class="col d-flex order-3 order-md-1 justify-content-center justify-content-md-start align-items-center">
+                                <p>Developed by Guilherme N. Lampert, for <a href="https://cs50.harvard.edu/x/2024/">CS50x 2024.</a></p>
+                            </div>
+                            <div class="col d-flex text-center text-white order-1 order-md-2 justify-content-center align-items-center">
+                                <h3><a href="{{ url_for('base.index') }}" class="text-white"><i class="bi bi-database"></i></a></h3>
+                            </div>
+                            <div class="col order-2 order-md-3">
+                                <ul class="nav justify-content-center align-items-center justify-content-md-end">
+                                    <li class="nav-item">
+                                    <a class="nav-link text-body-secondary" href="{{ url_for('base.index') }}">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                    <a class="nav-link text-body-secondary" href="{{ url_for('query.index') }}">Query</a>
+                                    </li>
+                                    <li class="nav-item">
+                                    <a class="nav-link text-body-secondary" href="{{ url_for('stock_market.index') }}">Stock market</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-body-secondary" href="{{ url_for('base.tutorial') }}">How to use</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+
+        {% endif %}
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="{{ url_for('static', filename='script.js') }}"></script>

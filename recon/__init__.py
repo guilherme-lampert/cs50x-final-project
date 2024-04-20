@@ -15,13 +15,16 @@ def create_app():
     from . import db
     db.init_app(app)
 
+    from . import base
+    app.register_blueprint(base.bp)
+
     from . import auth
     app.register_blueprint(auth.bp)
 
     from . import query
     app.register_blueprint(query.bp)
 
-    from . import stock_mkt
-    app.register_blueprint(stock_mkt.bp)
+    from . import stock_market
+    app.register_blueprint(stock_market.bp)
 
     return app
