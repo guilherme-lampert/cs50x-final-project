@@ -24,7 +24,4 @@ def create_app():
     from . import query
     app.register_blueprint(query.bp)
 
-    from . import stock_market
-    app.register_blueprint(stock_market.bp)
-
     return app

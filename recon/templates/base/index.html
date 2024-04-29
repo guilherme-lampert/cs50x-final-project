@@ -28,7 +28,11 @@
             </div>
             <form action="{{ url_for('query.country_summary') }}" class="row justify-content-center">
                 <div class="col-md-6">
-                    <input type="text" class="form-control bg-transparent border-light" name="country" placeholder="Brazil" data-bs-theme="dark">
+                    <input type="text" class="form-control bg-transparent border-light" id="index-input-country" name="country" placeholder="Country">
+                    <div class="dropdown">
+                        <ul class="dropdown-menu overflow-y-auto w-100" id="autocomplete-field" style="max-height: 200px;">
+                        </ul>
+                    </div>
                 </div>
                 <div class="col col-md-2 my-3 my-md-0">
                     <div class="d-grid">
@@ -40,12 +44,12 @@
     </div>
 
     <!-- Inspired by the features examples: https://getbootstrap.com/docs/5.3/examples/features/-->
-    <div class="container-fluid py-5 bg-dark text-white" data-bs-theme="dark">
+    <div class="container-fluid py-5 text-white">
         <div class="container">
             
             <div class="row pb-5 text-white-50">
                 <div class="col border-bottom">
-                    <h2>Free features</h2>
+                    <h2>Everyone features</h2>
                 </div>
             </div>
 
@@ -65,11 +69,13 @@
                 </div>
 
                 <div class="col d-md-flex flex-column align-items-start">
-                    <h1><i class="bi bi-graph-up text-primary"></i></h1>
-                    <h3>Stock market</h3>
-                    <p>Look up any stock you want and be informed about the current situation of the stock market. Know what's up and what's down. Is this a bull market or bear market?</p>
-                    <p class="mt-auto"><a class="link-offset-3" href="{{ url_for('stock_market.index') }}">See the market</a></p>
+                    <h1><i class="bi bi-book-half text-primary"></i></h1>
+                    <h3>Manual</h3>
+                    <p>Since our goal is to facilitate the search and understanding of macroeconomic variables, we have a manual that explains all the indicators and concepts presented.</p>
+                    <p class="mt-auto"><a class="link-offset-3" href="{{ url_for('base.tutorial') }}">Read the docs</a></p>
                 </div>
+
+                
             </div>
 
 
@@ -82,26 +88,22 @@
             <div class="row row-cols-1 row-cols-md-2 g-5">
                 <div class="col d-flex flex-column align-items-start justify-content-center gap-2">
                     <h3>Get more</h3>
-                    <p>By becoming a member of our platform, you will have access to other features that will help you in your queries. Not only that, you will also be able to track your favorite stocks. Join now, it's free.</p>
+                    <p>By becoming a member of our platform, you will have access to other features that will help you in your queries. Join now, it's free.</p>
                     <a class="btn btn-primary btn-lg" href="{{ url_for('auth.signup') }}" role="button">Register now</a>
                 </div>
                 <div class="col">
-                    <div class="row row-cols-1 row-cols-sm-2 g-4">
-                        <div class="col">
+                    <div class="row g-4">
+                        <div class="col-12 col-sm-6">
                             <h4><i class="bi bi-file-earmark-arrow-down-fill"></i> Download data</h4>
-                            <p>Download your refined queries in a .csv file so you can use them as you like.</p>
+                            <p>Download your refined queries in a .csv file so you can use them as you want.</p>
                         </div>
-                        <div class="col">
+                        <div class="col-12 col-sm-6">
                             <h4><i class="bi bi-floppy-fill"></i></i> Save queries</h4>
                             <p>Save your queries so that you don't need to repeat the process again.</p>
                         </div>
-                        <div class="col">
-                            <h4><i class="bi bi-pie-chart-fill"></i></i> Stock portfolio</h4>
-                            <p>Keep track of stocks that you've put in a stock portfolio. 100% customizable.</p>
-                        </div>
-                        <div class="col">
+                        <div class="col-12">
                             <h4><i class="bi bi-person-fill-gear"></i> Flexible account</h4>
-                            <p>Unsubscribe or reset your account any time you want. </p>
+                            <p>Create, modify, unsubscribe or reset your account any time you want. </p>
                         </div>
                     </div>
                 </div>
@@ -109,21 +111,23 @@
 
             <div class="row py-5 text-white-50">
                 <div class="col border-bottom">
-                    <h2>Data sources</h2>
+                    <h2>Data source</h2>
                 </div>
             </div>
             
-            <div class="row">    
-                <div class="col-12 col-md-6">
+            <div class="row row-cols-1 row-cols-md-2 g-4">    
+                
+                <div class="col">
                     <h3>International Monetary Fund (IMF)</h3>
-                    <p>The International Monetary Fund (IMF) works to achieve sustainable growth and prosperity for all of its 190 member countries. It does so by supporting economic policies that promote financial stability and monetary cooperation, which are essential to increase productivity, job creation, and economic well-being. The IMF is governed by and accountable to its member countries.</p>
+                    <p class="fw-light">The International Monetary Fund (IMF) works to achieve sustainable growth and prosperity for all of its 190 member countries. It does so by supporting economic policies that promote financial stability and monetary cooperation, which are essential to increase productivity, job creation, and economic well-being. The IMF is governed by and accountable to its member countries.</p>
+                    <p>Source: <a href="https://www.imf.org/en/About">The IMF website</a></p>
                 </div>
                 
-                <div class="col-12 col-md-6">
-                    <h3>Yahoo Finance</h3>
-                    <p>Yahoo Finance delivers hours of live, daily market coverage, with expert analysis and real-time market data right in the app. It's the place for insight-driven investors, financial professionals and business leaders who take their money seriously.</p>
+                <div class="col">
+                    <h3>World Economic Outlook (WEO)</h3>
+                    <p class="fw-light">Our data comes from the IMF API, and we only get the indicators provided by the World Economic Outlook, a Survey by the IMF staff usually published twice a year. It presents IMF staff economists' analyses of global economic developments during the near and medium term. Chapters give an overview as well as more detailed analysis of the world economy; consider issues affecting industrial countries, developing countries, and economies in transition to market; and address topics of pressing current interest. Annexes, boxes, charts, and an extensive statistical appendix augment the text.</p>
+                    <p>Source: <a href="https://www.imf.org/en/publications/weo">The WEO section</a></p>
                 </div>
-            
             </div>
         </div>
     </div>

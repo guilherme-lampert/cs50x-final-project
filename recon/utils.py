@@ -2,6 +2,7 @@ from flask import redirect, g, url_for
 import re
 import functools
 
+
 def check_password(password):
     """Check if user password is valid"""
 
@@ -39,3 +40,5 @@ def logoff_required(view):
         return view(*args, **kwargs)
 
     return wrapped_view
+
+

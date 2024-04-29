@@ -9,5 +9,111 @@
 {% endblock %}
 
 {% block main %}
-    <p>estamos em refined query</p>
+    
+    <form class="container" action="{{ url_for('query.refined_query_result') }}">
+
+        <div class="row py-3 my-3"></div>
+
+        <div class="row p-4">
+            <div class="col border-bottom py-3">
+                <h2>Countries</h2>
+            </div>
+        </div>
+
+        <!--
+            botão de selecionar tudo
+            botão de limpar tudo
+            botão de pesquisa
+            botão de avanço
+            inserir tooltips
+        -->
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-6 p-4 g-3">
+            {% for country in countries %}
+            <div class="col">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="country" value="{{ country.acronym }}" id="country_{{country.acronym}}">
+                    <label class="form-check-label" for="country_{{country.acronym}}">
+                        {{ country.name }}
+                    </label>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="row p-4">
+            <div class="col border-bottom py-3">
+                <h2>Indicators</h2>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 p-4">
+            {% for category in categories %}
+                <div class="col">
+                    <h4 class="border-bottom py-3">{{category}}</h4>
+                    {% for indicator in indicators %}
+                        {% if indicator['category'] ==  category %}
+                            <div class="row row-cols-1 row-cols-md-2">
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="indicator" value="{{ indicator.acronym }}" id="indicator_{{indicator.acronym}}">
+                                        <label class="form-check-label" for="indicator_{{indicator.acronym}}">
+                                            {{ indicator.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col text-white-50">
+                                    <p>{{ indicator.unit }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row p-4">
+            <div class="col border-bottom py-3">
+                <h2>Period</h2>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 p-4 g-3">
+            <div class="col">
+                <h6>Start year</h6>
+                <select class="form-select" name="start_year">
+                    <option value="1970" selected>1970</option>
+                    {% for year in range(1971, 2028) %}
+                        <option value="{{year}}">{{year}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <h6>End year</h6>
+                <select class="form-select" name="end_year">
+                    <option value="1970" selected>1970</option>
+                    {% for year in range(1971, 2028) %}
+                        <option value="{{year}}">{{year}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="row p-4">
+            <div class="col border-bottom py-3">
+                <h2>Submit</h2>
+            </div>
+        </div>
+
+        <div class="row d-flex p-4 mb-3">
+            <div class="col d-grid gap-2">
+                <button class="btn btn-warning" type="button">Select all</button>
+                <button class="btn btn-light" type="button">Clear all</button>
+            </div>
+            <div class="col d-grid gap-2">
+                <button type="submit" class="btn btn-primary" type="button">Query</button>
+            </div>
+        </div>
+    </form>
+
 {% endblock %}

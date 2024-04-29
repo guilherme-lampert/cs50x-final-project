@@ -1,11 +1,11 @@
 import sqlite3
 from flask import current_app, g
 
+
 """
 NOTE: Most of the functions were built following the pattern of the official Flask documentation. The ones with a few lines are basically the same.
 Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 """
-
 
 def init_app(app):
     """Ensures that the close_db function will be called after each response to close the connection"""
