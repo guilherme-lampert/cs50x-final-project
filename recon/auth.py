@@ -4,12 +4,13 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from recon.db import get_db
 from recon.utils import check_password, logoff_required
 
-bp = Blueprint("auth", __name__, url_prefix="/auth")
-
 """
-NOTE: Most of the routes were built following the pattern of the official Flask documentation. The ones with a few lines are basically the same.
+NOTE: Most of the routes were built following the pattern of the official Flask documentation. logout() and load_logged_in_user() are almost the same.
 Link: https://flask.palletsprojects.com/en/3.0.x/tutorial/views/
 """
+
+bp = Blueprint("auth", __name__, url_prefix="/auth")
+
 
 @bp.route("/signup", methods=["GET", "POST"])
 @logoff_required
@@ -105,7 +106,7 @@ def logout():
 
 @bp.before_app_request
 def load_logged_in_user():
-    """Checks if the user is logged in before running the view requested"""
+    """Checks for a session cookie and loads the user if it exists"""
     
     user_id = session.get("user_id")
 

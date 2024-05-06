@@ -9,6 +9,10 @@
     color: #0d6efd;
 }
 
+.country-item:hover {
+    cursor: pointer; /* Define o cursor para ponteiro */
+}
+
 .box {
     background-color: lightblue;
     border: 1px solid blue;

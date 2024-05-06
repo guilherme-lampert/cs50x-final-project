@@ -9,25 +9,191 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container" style="height: 200px;"></div>
-
+    
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <label for="input-datalist">Timezone</label>
-                <input type="text" class="form-control" placeholder="Timezone" list="list-timezone" id="input-datalist">
-                <ul class="dropdown-menu show position-relative" style="width: 100%;">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-        </div>
 
+        <div class="row py-3 my-3"></div>
+
+        {% for category, indicators in data.items() %}
+            <div class="row p-4">
+                <div class="col border-bottom mb-2">
+                    <h2>{{ category }}</h2>
+                </div>
+            </div>
+            
+            <div class="row row-cols-1 row-cols-xxl-2 p-4">
+                {% for indicator, value in indicators.items() %}
+                    <div class="col mb-4">
+                        <h4>{{ value.info.label }}</h4>
+                        <h6 class="text-white-50 border-bottom pb-2">{{ value.info.unit }}</h6>
+                        <canvas id="{{ indicator }}"></canvas>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
 
-    <div class="container" style="height: 200px;"></div>
+    <div class="container">
+        
+        <div class="row g-3 p-4 mb-5">
+            
+            <div class="col d-flex flex-column align-items-start justify-content-center">
+                <h5>Download the data and/or save your query</h5>
+            </div>
+            
+            <div class="col-md-auto">
+                {% if g.user %}
+                    <div  class="d-grid d-md-block">
+                        <button class="btn btn-primary" id ="download" type="button">Download</button>
+                    </div>
+                {% else %}
+                    <span class="d-grid d-md-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Register today and get access to the download feature!">
+                        <button class="btn btn-secondary" type="button" disabled>Download</button>
+                    </span>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-auto">
+                {% if g.user %}
+                    <div class="d-grid d-md-block">
+                        <button class="btn btn-primary" id ="save-query" type="button">Save query</button>
+                    </div>
+                {% else %}
+                    <span class="d-grid d-md-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Register today and get access to the save query feature!">
+                        <button class="btn btn-secondary" type="button" disabled>Save query</button>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
 
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
-<div class="form-group">
+    <script>
+        // This is from bootstrap documentation and is necessary for my tooltip button
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+
+    <script>
+        const data = JSON.parse('{{ data | tojson | replace("'", "\'") }}');
+
+        let download_button = document.getElementById('download');
+        
+        if (download_button) {
+            
+            // Chat GPT and google helped me with most of this logic. I never did this before and it was nice to learn
+            download_button.addEventListener('click', function() {
+                fetch('{{ url_for("query.download") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.blob())
+                .then(blob => {
+                    const a = document.createElement('a');
+                    const url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = 'export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    console.log(error)
+                });
+            });
+        }
+    </script>
+    
+    <script>
+        // I discovered that jinja in JS was possible reading Flask docs, and Chat GPT showed me the replace trick for this specific case
+
+        for (category in data) {
+            let indicators = data[category];
+            
+            for (indicator in indicators) {
+                let countries = indicators[indicator]['countries'];
+
+                let min_year = Infinity;
+                let max_year = -Infinity;
+
+                for (country in countries) {
+
+                    // Chat GPT showed me me this syntax
+                    let years = Object.keys(countries[country]['years']);
+
+                    // Chat GPT showed me me this syntax
+                    years = years.map(function(year) {
+                        return parseInt(year);
+                    });
+
+                    if (max_year < Math.max(...years)) {
+                        max_year = Math.max(...years);
+                    }
+
+                    if (min_year > Math.min(...years)) {
+                        min_year = Math.min(...years);
+                    }
+                }
+
+                let years = [];
+                for (var year = min_year; year <= max_year; year++) {
+                    years.push(year);
+                }
+
+                // Chat GPT showed me me this syntax
+                years = years.map(function(year) {
+                        return year.toString();
+                });
+
+                let datasets = [];
+
+                for (country in countries) {
+                    // Chat GPT showed me me this syntax
+                    let country_years = Object.keys(countries[country]['years']);
+                    
+                    let country_data = [];
+                    
+                    for (year of years) {
+                        
+                        if (country_years.includes(year)) {
+                            country_data.push(countries[country]['years'][year]);
+                        }
+                        else {
+                            country_data.push(null);
+                        }
+
+                    }
+
+                    datasets.push({
+                        label: countries[country]['name'],
+                        data: country_data
+                    });
+
+                }
+
+                const context = document.getElementById(indicator);
+
+                // I learned about chart.js through W3Schools and some articles on Medium
+                let chart = new Chart(context, {
+                    type: years.length > 1 ? 'line' : 'bar',
+                    data: {
+                        labels: years,
+                        datasets: datasets
+                    },
+                });
+            }
+        }
+    </script>
+
+{% endblock %}

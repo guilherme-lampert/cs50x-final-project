@@ -9,7 +9,7 @@ def create_app():
     
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.root_path, 'recon.db'),
+        DATABASE=os.path.join(app.root_path, 'recon.db')
     )
     
     from . import db

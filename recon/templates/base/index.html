@@ -26,11 +26,11 @@
                     </p>
                 </div>
             </div>
-            <form action="{{ url_for('query.country_summary') }}" class="row justify-content-center">
+            <form action="{{ url_for('query.country_summary') }}" class="row justify-content-center" id="index-country-form">
                 <div class="col-md-6">
-                    <input type="text" class="form-control bg-transparent border-light" id="index-input-country" name="country" placeholder="Country">
+                    <input type="text" autocomplete="off" class="form-control bg-transparent border-light" id="index-input-country" name="country" placeholder="Country">
                     <div class="dropdown">
-                        <ul class="dropdown-menu overflow-y-auto w-100" id="autocomplete-field" style="max-height: 200px;">
+                        <ul class="dropdown-menu overflow-y-auto w-100" id="index-autocomplete-list" style="max-height: 200px;">
                         </ul>
                     </div>
                 </div>
@@ -132,3 +132,8 @@
         </div>
     </div>
 {% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/base_index.js') }}"></script>
+{% endblock %}
+

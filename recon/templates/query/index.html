@@ -10,30 +10,27 @@
 
 {% block main %}
     
-    <form class="container" action="{{ url_for('query.refined_query_result') }}">
+    <form class="container" action="{{ url_for('query.refined_query_result') }}" id="query-index-form">
 
         <div class="row py-3 my-3"></div>
 
-        <div class="row p-4">
-            <div class="col border-bottom py-3">
+        <div class="row row-cols-1 row-cols-md-2 border-bottom p-4 g-3">
+            <div class="col text-center text-md-start">
                 <h2>Countries</h2>
             </div>
+            <div class="col">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-light" type="button" id="query-index-clear-all-country">Clear all</button>
+                </div>
+            </div>
         </div>
-
-        <!--
-            botão de selecionar tudo
-            botão de limpar tudo
-            botão de pesquisa
-            botão de avanço
-            inserir tooltips
-        -->
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-6 p-4 g-3">
             {% for country in countries %}
             <div class="col">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="country" value="{{ country.acronym }}" id="country_{{country.acronym}}">
-                    <label class="form-check-label" for="country_{{country.acronym}}">
+                    <input class="form-check-input country-input" type="checkbox" name="country" value="{{ country.acronym }}" id="{{country.acronym}}">
+                    <label class="form-check-label" for="{{country.acronym}}">
                         {{ country.name }}
                     </label>
                 </div>
@@ -41,9 +38,15 @@
             {% endfor %}
         </div>
 
-        <div class="row p-4">
-            <div class="col border-bottom py-3">
+        <div class="row row-cols-1 row-cols-md-2 border-bottom p-4 g-3">
+            <div class="col text-center text-md-start">
                 <h2>Indicators</h2>
+            </div>
+            <div class="col">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-warning" type="button" id="query-index-select-all-indicator">Select all</button>
+                    <button class="btn btn-light" type="button" id="query-index-clear-all-indicator">Clear all</button>
+                </div>
             </div>
         </div>
 
@@ -56,8 +59,8 @@
                             <div class="row row-cols-1 row-cols-md-2">
                                 <div class="col">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="indicator" value="{{ indicator.acronym }}" id="indicator_{{indicator.acronym}}">
-                                        <label class="form-check-label" for="indicator_{{indicator.acronym}}">
+                                        <input class="form-check-input indicator-input" type="checkbox" name="indicator" value="{{ indicator.acronym }}" id="{{indicator.acronym}}">
+                                        <label class="form-check-label" for="{{indicator.acronym}}">
                                             {{ indicator.label }}
                                         </label>
                                     </div>
@@ -72,8 +75,8 @@
             {% endfor %}
         </div>
 
-        <div class="row p-4">
-            <div class="col border-bottom py-3">
+        <div class="row row-cols-1 row-cols-md-2 border-bottom p-4 g-3">
+            <div class="col">
                 <h2>Period</h2>
             </div>
         </div>
@@ -81,34 +84,34 @@
         <div class="row row-cols-1 row-cols-md-2 p-4 g-3">
             <div class="col">
                 <h6>Start year</h6>
-                <select class="form-select" name="start_year">
-                    <option value="1970" selected>1970</option>
-                    {% for year in range(1971, 2028) %}
+                <select class="form-select" name="start_year" id="start-year-input">
+                    <option value="2029" selected>2029</option>
+                    {% for year in range(2028, 1979, -1) %}
                         <option value="{{year}}">{{year}}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col">
                 <h6>End year</h6>
-                <select class="form-select" name="end_year">
-                    <option value="1970" selected>1970</option>
-                    {% for year in range(1971, 2028) %}
+                <select class="form-select" name="end_year" id="end-year-input">
+                    <option value="2029" selected>2029</option>
+                    {% for year in range(2028, 1979, -1) %}
                         <option value="{{year}}">{{year}}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
         
-        <div class="row p-4">
-            <div class="col border-bottom py-3">
+        <div class="row border-bottom p-4 g-3">
+            <div class="col">
                 <h2>Submit</h2>
             </div>
         </div>
 
         <div class="row d-flex p-4 mb-3">
             <div class="col d-grid gap-2">
-                <button class="btn btn-warning" type="button">Select all</button>
-                <button class="btn btn-light" type="button">Clear all</button>
+                <button class="btn btn-warning" type="button" id="query-index-select-all">Select all</button>
+                <button class="btn btn-light" type="button" id="query-index-clear-all">Clear all</button>
             </div>
             <div class="col d-grid gap-2">
                 <button type="submit" class="btn btn-primary" type="button">Query</button>
@@ -116,4 +119,8 @@
         </div>
     </form>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/query_index.js') }}"></script>
 {% endblock %}
