@@ -86,7 +86,7 @@ def get_api_data(countries, indicators, start_year, end_year):
 
     url = base_url + "/".join(indicators) + "/" + "/".join(countries)
     url = url + "?periods=" + ",".join([str(year) for year in range(start_year, end_year + 1)])
-
+    
     try:
         api_data = requests.get(url).json()
 

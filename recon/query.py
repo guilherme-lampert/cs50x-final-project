@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, flash, jsonify, request, make_response
+from flask import Blueprint, render_template, flash, jsonify, request, g, make_response
 from recon.db import get_db
 from recon.utils import load_countries, load_indicators, load_categories, get_api_data, get_df, login_required
+import datetime
 
 bp = Blueprint("query", __name__, url_prefix="/query")
 
@@ -15,11 +16,61 @@ def index():
 @bp.route("/country-summary")
 def country_summary():
     """Loads the result page for a country"""
+
+    error = ""
+
+    db = get_db()
     
-    return render_template("query/country-summary.html")
+    if not (country := request.args.get("country")) or country == "none":
+        error = "The country was not selected"
+
+    elif not db.execute(
+        "SELECT * FROM country WHERE acronym = ?", (country,)
+    ).fetchone():
+        error = "Invalid parameter for country"
+    
+    if not error:
+
+        country = [country]
+
+        db_indicators = load_indicators()
+        indicators = []
+
+        for indicator in db_indicators:
+            
+            if indicator["category"] == "National accounts" and indicator["acronym"] in ["NGDP_RPCH", "NGDPDPC"]:
+                indicators.append(indicator["acronym"])
+            
+            elif indicator["category"] != "National accounts":
+                indicators.append(indicator["acronym"])
+
+        end_year = datetime.datetime.now().year
+        start_year = end_year - 9
+
+        data = get_api_data(country, indicators, start_year, end_year)
+
+        if not data:
+            return render_template("query/no-result.html")
+
+        if g.user:
+            save_param = {
+                'countries': country,
+                'indicators': indicators,
+                'start_year': start_year,
+                'end_year': end_year
+            }
+        
+        else:
+            save_param = None
+        
+        return render_template("query/result.html", data=data, save_param=save_param)
+
+    else:
+        flash(error)
+        return render_template("base/index.html", countries=load_countries(), indicators=load_indicators(), categories=load_categories(), error=error)
 
 
-@bp.route("/refined-query-result")
+@bp.route("/result")
 def refined_query_result():
     """Loads the result page for a specific query"""
 
@@ -56,17 +107,28 @@ def refined_query_result():
                 error = "Can't select more than 5 countries"
 
         except Exception as e:
-            print("Could not convert the years or lists", e)
-            error = "Invalid format for the years"
+            print("Could not convert the years or lists: ", e)
+            error = "Invalid format for the parameters"
     
     if not error:
         
         data = get_api_data(countries, indicators, start_year, end_year)
         
         if not data:
-            return render_template("query/refined-query-not-result.html")
+            return render_template("query/no-result.html")
+        
+        if g.user:
+            save_param = {
+                'countries': countries,
+                'indicators': indicators,
+                'start_year': start_year,
+                'end_year': end_year
+            }
+        
+        else:
+            save_param = None
 
-        return render_template("query/refined-query-result.html", data=data)
+        return render_template("query/result.html", data=data, save_param=save_param)
 
     else:
         flash(error)
@@ -141,4 +203,93 @@ def download():
 @login_required
 @bp.route("/save-query", methods=["POST"])
 def save_query():
-    ...
+    """Handles save query requests"""
+
+    status = ""
+
+    try:
+        data = request.json
+
+        if not (name := data.get("name")):
+            status = "Missing name. The query was not saved."
+        
+        elif not (start_year := data.get("start_year")):
+            status = "Missing start year. The query was not saved."
+        
+        elif not (end_year := data.get("start_year")):
+            status = "Missing end year. The query was not saved."
+
+        elif not (countries := data.get("countries")):
+            status = "Missing countries. The query was not saved."
+
+        elif not (indicators := data.get("indicators")):
+            status = "Missing indicators. The query was not saved."
+
+        elif not isinstance(countries, list):
+            status = "Incorrect type for countries. The query was not saved."
+        
+        elif not isinstance(indicators, list):
+            status = "Incorrect type for indicators. The query was not saved."
+    
+    except Exception as e:
+        print(f"Could not load the data in save query view: {e}")
+        status = "An error occoured, the query was not saved."
+    
+    if not status:
+    
+        try:
+            db = get_db()
+
+            query_id = db.execute(
+                "SELECT * FROM query WHERE name = ? AND user_id = ?", (name, g.user["id"],)
+            ).fetchone()
+
+            print("foi")
+
+            if not query_id:
+                
+                current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                db.execute(
+                    "INSERT INTO query (name, start_year, end_year, date, user_id) VALUES (?, ?, ?, ?, ?)",
+                    (name, start_year, end_year, current_date, g.user["id"])
+                )
+
+                query_id = db.execute(
+                    "SELECT * FROM query WHERE name = ? AND user_id = ?", (name, g.user["id"],)
+                ).fetchone()["id"]
+
+                for country in countries:
+                    
+                    country_id = db.execute(
+                        "SELECT * FROM country WHERE acronym = ?", (country,)
+                    ).fetchone()["id"]
+                    
+                    db.execute(
+                        "INSERT INTO query_country (query_id, country_id) VALUES (?, ?)",
+                        (query_id, country_id)
+                    )
+                
+                for indicator in indicators:
+
+                    indicator_id = db.execute(
+                        "SELECT * FROM indicator WHERE acronym = ?", (indicator,)
+                    ).fetchone()["id"]
+
+                    db.execute(
+                        "INSERT INTO query_indicator (query_id, indicator_id) VALUES (?, ?)",
+                        (query_id, indicator_id)
+                    )
+
+                db.commit()
+
+                status = "Query successfully saved!"
+            
+            else:
+                status = "This query name already exists"
+        
+        except Exception as e:
+            print(f"Could not save the data in query view: {e}")
+            status = "An error occoured, the query was not saved."
+
+    return status

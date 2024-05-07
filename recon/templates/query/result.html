@@ -47,7 +47,7 @@
                         <button class="btn btn-primary" id ="download" type="button">Download</button>
                     </div>
                 {% else %}
-                    <span class="d-grid d-md-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Register today and get access to the download feature!">
+                    <span class="d-grid d-md-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Register today and get access to the download feature!">
                         <button class="btn btn-secondary" type="button" disabled>Download</button>
                     </span>
                 {% endif %}
@@ -56,10 +56,42 @@
             <div class="col-md-auto">
                 {% if g.user %}
                     <div class="d-grid d-md-block">
-                        <button class="btn btn-primary" id ="save-query" type="button">Save query</button>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#save-query-modal">Save query</button>
                     </div>
+                    <div class="modal fade" id="save-query-modal" tabindex="-1">
+                        <div class="modal-dialog modal-fullscreen-sm-down">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="save-query-modal-label">Name your query</h1>
+                                    <button type="button" class="btn-close" id="close-modal" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <textarea class="form-control" id="query-name"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="save-query" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <strong class="me-auto">About your saved query</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body" id="toast-body">
+                            </div>
+                        </div>
+                    </div>
+                    
                 {% else %}
-                    <span class="d-grid d-md-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Register today and get access to the save query feature!">
+                    <span class="d-grid d-md-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Register today and get access to the save query feature!">
                         <button class="btn btn-secondary" type="button" disabled>Save query</button>
                     </span>
                 {% endif %}
@@ -77,6 +109,54 @@
         // This is from bootstrap documentation and is necessary for my tooltip button
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+
+    <script>
+        let save_param = JSON.parse('{{ save_param | tojson }}');
+
+        // Chat GPT and google helped me with most of this logic. I never did this before and it was nice to learn
+        let save_button = document.getElementById('save-query');
+        save_button.addEventListener('click', async function() {
+            
+            let query_name_element = document.getElementById('query-name');
+            let query_name = query_name_element.value;
+            save_param.name = query_name;
+
+            if (!query_name) {
+                return null;
+            }
+            
+            let saved_query_status = await fetch('{{ url_for("query.save_query") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(save_param)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Erro na requisição: ' + response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+
+            document.getElementById('close-modal').click();
+            query_name_element.value = '';
+
+            // This was copied from bootstrap docs to activate the toast
+            const toastBody = document.getElementById('toast-body');
+            toastBody.innerHTML = saved_query_status;
+
+            const toastLiveExample = document.getElementById('liveToast');
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+
+        });
+
     </script>
 
     <script>
@@ -108,7 +188,7 @@
                     document.body.removeChild(a);
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error: ', error);
                     console.log(error)
                 });
             });
@@ -129,10 +209,10 @@
 
                 for (country in countries) {
 
-                    // Chat GPT showed me me this syntax
+                    // Chat GPT showed me this syntax
                     let years = Object.keys(countries[country]['years']);
 
-                    // Chat GPT showed me me this syntax
+                    // Chat GPT showed me this syntax
                     years = years.map(function(year) {
                         return parseInt(year);
                     });
@@ -151,7 +231,7 @@
                     years.push(year);
                 }
 
-                // Chat GPT showed me me this syntax
+                // Chat GPT showed me this syntax
                 years = years.map(function(year) {
                         return year.toString();
                 });
@@ -159,7 +239,7 @@
                 let datasets = [];
 
                 for (country in countries) {
-                    // Chat GPT showed me me this syntax
+                    // Chat GPT showed me this syntax
                     let country_years = Object.keys(countries[country]['years']);
                     
                     let country_data = [];

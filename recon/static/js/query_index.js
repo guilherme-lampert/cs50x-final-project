@@ -37,18 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
         clear_all('indicator-input');
     });
 
-    let select_all_ci = document.getElementById('query-index-select-all');
-    select_all_ci.addEventListener('click', function() {
-        select_all('country-input');
-        select_all('indicator-input');
-    });
-
-    let clear_all_ci = document.getElementById('query-index-clear-all');
-    clear_all_ci.addEventListener('click', function() {
-        clear_all('country-input');
-        clear_all('indicator-input');
-    });
-
     // Modify GET parameters before sending the form. Again, i discovered most of the syntax here using chat GPT and Stack Overflow
     let form = document.getElementById('query-index-form');
     form.addEventListener('submit', function(event) {

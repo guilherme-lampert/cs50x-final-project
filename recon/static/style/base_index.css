@@ -1,0 +1,10 @@
+#index-search{
+    background-image: url("../img/index-search.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.country-item:hover {
+    cursor: pointer;
+}

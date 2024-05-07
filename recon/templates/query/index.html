@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Refined query
+    Query
 {% endblock %}
 
 {% block query_active %}
@@ -101,20 +101,10 @@
                 </select>
             </div>
         </div>
-        
-        <div class="row border-bottom p-4 g-3">
-            <div class="col">
-                <h2>Submit</h2>
-            </div>
-        </div>
 
-        <div class="row d-flex p-4 mb-3">
-            <div class="col d-grid gap-2">
-                <button class="btn btn-warning" type="button" id="query-index-select-all">Select all</button>
-                <button class="btn btn-light" type="button" id="query-index-clear-all">Clear all</button>
-            </div>
-            <div class="col d-grid gap-2">
-                <button type="submit" class="btn btn-primary" type="button">Query</button>
+        <div class="row p-4 mb-3">
+            <div class="col col-md-6 d-grid">
+                <button type="submit" class="btn btn-primary btn-lg" type="button">Query</button>
             </div>
         </div>
     </form>

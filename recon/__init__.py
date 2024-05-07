@@ -15,11 +15,14 @@ def create_app():
     from . import db
     db.init_app(app)
 
-    from . import base
-    app.register_blueprint(base.bp)
-
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import user
+    app.register_blueprint(user.bp)
+
+    from . import base
+    app.register_blueprint(base.bp)
 
     from . import query
     app.register_blueprint(query.bp)
