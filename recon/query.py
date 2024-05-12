@@ -206,6 +206,7 @@ def save_query():
     """Handles save query requests"""
 
     status = ""
+    db = get_db()
 
     try:
         data = request.json
@@ -216,7 +217,7 @@ def save_query():
         elif not (start_year := data.get("start_year")):
             status = "Missing start year. The query was not saved."
         
-        elif not (end_year := data.get("start_year")):
+        elif not (end_year := data.get("end_year")):
             status = "Missing end year. The query was not saved."
 
         elif not (countries := data.get("countries")):
@@ -230,25 +231,27 @@ def save_query():
         
         elif not isinstance(indicators, list):
             status = "Incorrect type for indicators. The query was not saved."
+
+        elif len(db.execute("SELECT * FROM query WHERE user_id = ?", (g.user["id"],)).fetchall()) >= 10:
+            status = "You can't save more than 10 queries."
+        
+        #elif len(db.execute("SELECT * FROM query WHERE user_id = ?"), (g.user["id"]) >= 10):
+        #    status = "Not saved. Can't save more than 10 queries."
     
     except Exception as e:
         print(f"Could not load the data in save query view: {e}")
         status = "An error occoured, the query was not saved."
-    
+
     if not status:
     
         try:
-            db = get_db()
-
             query_id = db.execute(
                 "SELECT * FROM query WHERE name = ? AND user_id = ?", (name, g.user["id"],)
             ).fetchone()
 
-            print("foi")
-
             if not query_id:
                 
-                current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                current_date = datetime.datetime.now().strftime("%m-%d-%Y %H:%M")
 
                 db.execute(
                     "INSERT INTO query (name, start_year, end_year, date, user_id) VALUES (?, ?, ?, ?, ?)",

@@ -12,9 +12,9 @@
 
     {% if queries %}
 
-        <div class="container">
+        <div class="container" style="min-height: 80vh;">
 
-            <div class="row py-3 my-3"></div>
+            <div class="row py-3 my-4"></div>
             
             <div class="row p-4">
                 <div class="col">
@@ -24,26 +24,89 @@
 
             <div class="row p-4">
                 <div class="col">
+                    <div class="accordion">
+                        {% for id, query in queries.items() %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ id }}" aria-expanded="false" aria-controls="collapse_{{ id }}">
+                                        {{ query.name }}
+                                    </button>
+                                </h2>
+                                <div id="collapse_{{ id }}" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div class="row border-bottom pb-3 mb-3">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <p class="mb-0 me-3">{{ query.date }}</p>
+                                                <form method="post">
+                                                    <input type="hidden" name="id" value="{{ id }}">
+                                                    <div class="btn-group" role="group">
+                                                        <button type="submit" class="btn btn-success" formaction="{{ url_for('user.queries') }}">See</button>
+                                                        <button type="submit" class="btn btn-danger" formaction="{{ url_for('user.delete_query') }}">Del</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="row border-bottom pb-3 mb-3">
+                                            <div class="col-12 col-sm text-center align-self-center my-2">
+                                                <h5>Countries</h5>
+                                                <p class="text-white-50 m-0">
+                                                    {% for country in query.countries %}
+                                                        {{ country }}{% if not loop.last %}, {% else %} {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            </div>
+                                            <div class="col text-center align-self-center my-2">
+                                                <h5>Start</h5>
+                                                <p class="text-white-50 m-0">{{ query.start_year }}</p>
+                                            </div>
+                                            <div class="col text-center align-self-center my-2">
+                                                <h5>End</h5>
+                                                <p class="text-white-50 m-0">{{ query.end_year }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">                                      
+                                            <div class="col">
+                                                <h4 class="text-center pb-3 mt-3">Indicators</h4>
+                                                <div class="row">
+                                                    {% for category, indicators in query.indicators.items() %}
+                                                        <div class="col-12 col-md-6 col-lg-4">
+                                                            <p class="fw-bold fs-5 text-secondary-emphasis border-bottom text-center p-2 my-2">{{ category }}</p>
+                                                            <div class="row">
+                                                                {% for label, unit in indicators %}
+                                                                    <div class="col-12 col-lg">
+                                                                        <p class="m-0 text-body-secondary">{{ label }}</p>
+                                                                        <p class="fw-light fst-italic text-white-50">{{ unit }}</p>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        
         </div>
-        
-
-
     {% else %}
-
-        <div class="container">
+        <div class="d-flex justify-content-center align-items-center p-5" style="height: 80vh;">
             <div class="row">
                 <div class="col">
-
+                    <h1>You don't have any saved queries.</h1>
                 </div>
             </div>
         </div>
-
-
-
-
-
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+
+    </script>
+
 {% endblock %}

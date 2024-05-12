@@ -188,3 +188,61 @@ def get_df(data):
         print(f"An error occoured during the get_df() utils function: {e}")
         return None
     
+
+def load_user_queries(user_id):
+    """Loads all the queries of that user"""
+    
+    db = get_db()
+
+    rows = db.execute(
+        "SELECT q.id AS query_id, q.name AS query_name, q.start_year AS start_year, q.end_year AS end_year, q.date AS date, "
+        "c.name AS country_name, i.category AS indicator_category, i.label AS indicator_label, i.unit AS indicator_unit "
+        
+        "FROM query AS q "
+
+        "JOIN query_country AS qc "
+        "ON q.id = qc.query_id "
+
+        "JOIN query_indicator AS qi "
+        "ON q.id = qi.query_id " 
+
+        "JOIN country AS c "
+        "ON qc.country_id = c.id "
+
+        "JOIN indicator AS i "
+        "ON qi.indicator_id = i.id "
+
+        "WHERE q.user_id = ?",
+        (user_id,)
+    ).fetchall()
+
+    queries = {}
+
+    for row in rows:
+
+        id = row["query_id"]
+
+        indicator_category = row["indicator_category"]
+        indicator_values = (row["indicator_label"], row["indicator_unit"])
+        
+        if id not in queries:
+            queries[id] = {
+                "name": row["query_name"],
+                "countries": [row["country_name"]],
+                "indicators": {indicator_category: [indicator_values]},
+                "start_year": row["start_year"],
+                "end_year": row["end_year"],
+                "date": row["date"]
+            }
+
+        else:
+            if row["country_name"] not in queries[id]["countries"]:
+                queries[id]["countries"].append(row["country_name"])
+            
+            if indicator_category not in queries[id]["indicators"]:
+                queries[id]["indicators"].update({indicator_category: [indicator_values]})
+            
+            elif indicator_category in queries[id]["indicators"] and indicator_values not in queries[id]["indicators"][indicator_category]:
+                queries[id]["indicators"][indicator_category].append(indicator_values)
+    
+    return queries

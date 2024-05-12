@@ -20,7 +20,7 @@ function clear_all (class_name) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // The functions above register the functions select_all() and clear_all() for buttons in the query index page
+    // The functions below register the functions select_all() and clear_all() for buttons in the query index page
 
     let clear_all_country = document.getElementById('query-index-clear-all-country');
     clear_all_country.addEventListener('click', function() {
@@ -76,5 +76,37 @@ document.addEventListener('DOMContentLoaded', function() {
         url.searchParams.set('end_year', end_year);
         
         window.location.href = url.toString();
+    });
+
+    let country_checkboxes = document.getElementsByName('country');
+
+    function getCountriesChecked() {
+
+        let check_count = 0;
+        for (let country of country_checkboxes) {
+            if (country.checked) {
+                check_count++;
+            }
+        }
+        return check_count;
+    }
+
+    country_checkboxes.forEach((country) => {
+        country.addEventListener('click', function () {
+
+            let countries_checked = getCountriesChecked();
+
+            console.log(countries_checked);
+
+            if (countries_checked > 5) {
+                
+                // This was copied from bootstrap docs to activate the toast
+                const toast = document.getElementById('liveToast');
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+                toastBootstrap.show();
+
+                country.click();
+            }
+        });
     });
 });

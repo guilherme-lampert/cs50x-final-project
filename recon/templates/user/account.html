@@ -9,9 +9,195 @@
 {% endblock %}
 
 {% block main %}
+    <div class="container" style="min-height: 80vh;">
 
-{% endblock %}
+        <div class="row py-3 my-4"></div>
 
-{% block scripts %}
+        <div class="row p-4">
+                <div class="col">
+                    <h2>My account</h2>
+                </div>
+            </div>
+
+        <div class="row p-4">
+            <div class="col-12 col-sm-auto text-center text-sm-start align-self-center">
+                <img src="{{ url_for('static', filename='img/user.png') }}" class="img-fluid" alt="..." style="width: 100px; height: 100px;">
+            </div>
+
+            <div class="col-12 col-sm-auto text-center text-sm-start align-self-center">
+                <p class="fs-3 m-0">{{ user.username }}</p>
+                <p><a class="link-opacity-50 link-underline-dark" role="button" href="#" data-bs-toggle="modal" data-bs-target="#change-username-modal">Change username</a></p>
+                <div class="modal fade" id="change-username-modal" tabindex="-1">
+                    <div class="modal-dialog modal-fullscreen-sm-down">
+                        <form class="modal-content" action="{{ url_for('user.change_username') }}" method="post">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Changing username</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="input-username" class="form-label">Username</label>
+                                                <input type="text" class="form-control" name="username" id="input-username" placeholder="duck50" value="{{ user.username }}" autocomplete="off">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="input-password" class="form-label">Password</label>
+                                                <input type="password" class="form-control" name="password" id="input-password" placeholder="Insert your password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if user.first_name or user.last_name %}
+                <div class="col col-sm align-self-center">
+                    <div class="d-flex flex-column flex-md-row text-center text-sm-end text-md-start">
+                        {% if user.first_name %}
+                            <div class="d-flex flex-column mb-3 ms-sm-auto">
+                                <h6 class="text-white-50 m-0">First name</h6>
+                                <h5 class="m-0">{{ user.first_name }}</h5>
+                            </div>
+                        {% endif %}
+                        {% if user.last_name %}
+                            <div class="d-flex flex-column ms-sm-auto">
+                                <h6 class="text-white-50 m-0">Last name</h6>
+                                <h5 class="m-0">{{ user.last_name }}</h5>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-12 border-bottom p-3"></div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="d-grid gap-2 d-md-block">
+                    
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#change-name-modal">Change full name</button>
+                    <div class="modal fade" id="change-name-modal" tabindex="-1">
+                        <div class="modal-dialog modal-fullscreen-sm-down">
+                            <form class="modal-content" action="{{ url_for('user.change_full_name') }}" method="post">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5">Changing full name</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3">
+                                                    <label for="input-first-name" class="form-label">First name</label>
+                                                    <input type="text" class="form-control" name="first_name" id="input-first-name" placeholder="David" value="{{ user.first_name }}" autocomplete="off">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="input-last-name" class="form-label">Last name</label>
+                                                    <input type="text" class="form-control" name="last_name" id="input-last-name" placeholder="Malan" value="{{ user.last_name }}" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#change-password-modal">Change password</button>
+                    <div class="modal fade" id="change-password-modal" tabindex="-1">
+                        <div class="modal-dialog modal-fullscreen-sm-down">
+                            <form class="modal-content" action="{{ url_for('user.change_password') }}" method="post">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5">Changing password</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3">
+                                                    <label for="input-current-password" class="form-label">Current password</label>
+                                                    <input type="password" class="form-control" name="current_password" id="input-current-password" placeholder="Insert your current password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="input-new-password" class="form-label">New password</label>
+                                                    <input type="password" class="form-control" name="new_password" id="input-new-password" placeholder="Insert your new password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="input-confirm-password" class="form-label">Confirm new password</label>
+                                                    <input type="password" class="form-control" name="confirm_password" id="input-confirm-password" placeholder="Confirm your new password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <p>Your password must have:</p>
+                                                    <ul>
+                                                        <li>1 uppercase letter</li>
+                                                        <li>1 lowercase letter</li>
+                                                        <li>1 digit</li>
+                                                        <li>1 special character</li>
+                                                        <li>min. 8 characters</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete-account-modal">Delete account</button>
+                    <div class="modal fade" id="delete-account-modal" tabindex="-1">
+                        <div class="modal-dialog modal-fullscreen-sm-down">
+                            <form class="modal-content" action="{{ url_for('user.delete_account') }}" method="post">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5">Are you sure?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3">
+                                                    <p>Do you really wanna delete your account?</p>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="input-password-2" class="form-label">Password</label>
+                                                    <input type="password" class="form-control" name="password" id="input-password-2" placeholder="Insert your password">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="input-confirm-password-2" class="form-label">Confirm your password</label>
+                                                    <input type="password" class="form-control" name="confirm_password" id="input-confirm-password-2" placeholder="Confirm your password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
