@@ -8,7 +8,7 @@ def create_app():
     app = Flask(__name__)
     
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY='c1bb9201953ed4c42209d8dc90e9a349582aaf897f35b6ab4afd31153a050069',
         DATABASE=os.path.join(app.root_path, 'recon.db')
     )
     
