@@ -234,9 +234,6 @@ def save_query():
 
         elif len(db.execute("SELECT * FROM query WHERE user_id = ?", (g.user["id"],)).fetchall()) >= 10:
             status = "You can't save more than 10 queries."
-        
-        #elif len(db.execute("SELECT * FROM query WHERE user_id = ?"), (g.user["id"]) >= 10):
-        #    status = "Not saved. Can't save more than 10 queries."
     
     except Exception as e:
         print(f"Could not load the data in save query view: {e}")

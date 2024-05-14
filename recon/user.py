@@ -147,8 +147,6 @@ def delete_account():
         
         db = get_db()
 
-        # deletar usuario e queries desse usuario
-
         user_queries = db.execute(
             "SELECT * FROM query WHERE user_id = ?", (g.user["id"],)
         ).fetchall()
