@@ -13,7 +13,7 @@ For this project, i used the following tools/programming languages:
 * JavaScript and Chart JS
 * HTML, CSS and Bootstrap
 
-# ========= Features =========
+# Features
 
 ## Everyone can access
 Without creating an account, you have acces to the two main features of the application.
