@@ -2,7 +2,7 @@
 
 This is my very first project and it was made to complete the CS50x course from Harvard. For this exercise, I created a Flask application that uses the free IMF API to fetch data and return results in the form of charts. I also practiced the creation of user accounts and login sessions.
 
-Since this is my first project, I understand that the code has a lot of room for improvement and I know this can only be achieved through practice and more projects. Thank you!
+* Please note that this is just an exercise and it was my very first project. I understand that the code has a lot of room for improvement and I know this can only be achieved through practice and more projects. Thank you!
 
 #### Video Demo:  <https://youtu.be/LPd1VWT4BFo>
 #### Description:
